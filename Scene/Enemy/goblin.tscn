@@ -1,0 +1,119 @@
+[gd_scene load_steps=17 format=3 uid="uid://dnmfe062x8x8a"]
+
+[ext_resource type="Texture2D" uid="uid://dmg71oxyedrtg" path="res://Assets/Enemy/Goblin/goblin_attack_anim_strip_4.png" id="1_8nfpf"]
+[ext_resource type="Script" uid="uid://cgi4dx1lff4pn" path="res://Scripts/Enemy/goblin.gd" id="1_fexbq"]
+[ext_resource type="Texture2D" uid="uid://du2ejwqfjb1gk" path="res://Assets/Enemy/Goblin/goblin_run_anim_strip_6.png" id="4_tmcbm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2bck"]
+atlas = ExtResource("1_8nfpf")
+region = Rect2(0, 0, 24, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6g0l1"]
+atlas = ExtResource("1_8nfpf")
+region = Rect2(24, 0, 24, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ikfre"]
+atlas = ExtResource("1_8nfpf")
+region = Rect2(48, 0, 24, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bgs25"]
+atlas = ExtResource("1_8nfpf")
+region = Rect2(72, 0, 24, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3e0hk"]
+atlas = ExtResource("4_tmcbm")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6dp4r"]
+atlas = ExtResource("4_tmcbm")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwgxh"]
+atlas = ExtResource("4_tmcbm")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y28c0"]
+atlas = ExtResource("4_tmcbm")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30doo"]
+atlas = ExtResource("4_tmcbm")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1hkyj"]
+atlas = ExtResource("4_tmcbm")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gssw3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2bck")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6g0l1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ikfre")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bgs25")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3e0hk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6dp4r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pwgxh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y28c0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_30doo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1hkyj")
+}],
+"loop": true,
+"name": &"move",
+"speed": 6.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iqedx"]
+size = Vector2(13.3333, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n3vwo"]
+size = Vector2(21.3333, 13.3333)
+
+[node name="Goblin" type="CharacterBody2D"]
+scale = Vector2(3, 3)
+script = ExtResource("1_fexbq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_gssw3")
+animation = &"move"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+texture_filter = 1
+position = Vector2(-1.33333, 0)
+shape = SubResource("RectangleShape2D_iqedx")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(8, 0)
+target_position = Vector2(0, 10.6667)
+
+[node name="GoblinHitBox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GoblinHitBox" groups=["player"]]
+position = Vector2(-1.33333, -1.33333)
+shape = SubResource("RectangleShape2D_n3vwo")
+
+[connection signal="area_entered" from="GoblinHitBox" to="." method="_on_goblin_hit_box_area_entered"]

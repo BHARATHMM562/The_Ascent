@@ -1,0 +1,143 @@
+[gd_scene load_steps=20 format=3 uid="uid://d3i7eawwu845o"]
+
+[ext_resource type="Script" uid="uid://bxfxjghemel3n" path="res://Scripts/Enemy/shinobi.gd" id="1_ksqlj"]
+[ext_resource type="Texture2D" uid="uid://dov4twkirspha" path="res://Assets/Enemy/Shinobi/Attack_1.png" id="2_46bnw"]
+[ext_resource type="Texture2D" uid="uid://doi2l8053iuu2" path="res://Assets/Enemy/Shinobi/Run.png" id="2_ksqlj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hnl32"]
+atlas = ExtResource("2_46bnw")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7okr6"]
+atlas = ExtResource("2_46bnw")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3tq46"]
+atlas = ExtResource("2_46bnw")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ol8ec"]
+atlas = ExtResource("2_46bnw")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pu6xx"]
+atlas = ExtResource("2_46bnw")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_46bnw"]
+atlas = ExtResource("2_ksqlj")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fy4n4"]
+atlas = ExtResource("2_ksqlj")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fpykj"]
+atlas = ExtResource("2_ksqlj")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_flmgk"]
+atlas = ExtResource("2_ksqlj")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4sl55"]
+atlas = ExtResource("2_ksqlj")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ih7e"]
+atlas = ExtResource("2_ksqlj")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfqwv"]
+atlas = ExtResource("2_ksqlj")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjarx"]
+atlas = ExtResource("2_ksqlj")
+region = Rect2(896, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hnl32"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hnl32")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7okr6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3tq46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ol8ec")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pu6xx")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_46bnw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fy4n4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fpykj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_flmgk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4sl55")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ih7e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfqwv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjarx")
+}],
+"loop": true,
+"name": &"move",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iqedx"]
+size = Vector2(13.3333, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n3vwo"]
+size = Vector2(21.3333, 13.3333)
+
+[node name="Shinobi" type="CharacterBody2D"]
+scale = Vector2(5, 5)
+script = ExtResource("1_ksqlj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -5.06667)
+scale = Vector2(0.2, 0.204167)
+sprite_frames = SubResource("SpriteFrames_hnl32")
+animation = &"attack"
+frame_progress = 0.242296
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+texture_filter = 1
+position = Vector2(-1.33333, 0)
+shape = SubResource("RectangleShape2D_iqedx")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(8, 0)
+target_position = Vector2(0, 10.6667)
+
+[node name="ShinobiHitBox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShinobiHitBox" groups=["player"]]
+position = Vector2(-6.51677e-06, -1.33333)
+shape = SubResource("RectangleShape2D_n3vwo")
+
+[connection signal="area_entered" from="ShinobiHitBox" to="." method="_on_goblin_hit_box_area_entered"]

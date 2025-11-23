@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://nrgqw8kot4al"]
+
+[ext_resource type="Texture2D" uid="uid://rf22u4j5kij6" path="res://Assets/UI/Gemini_Generated_Image_onsns0onsns0onsn.png" id="1_5414y"]
+[ext_resource type="Script" uid="uid://cak63i8nytc2v" path="res://Scripts/Main Menu/end.gd" id="1_xavt3"]
+
+[node name="End" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xavt3")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_5414y")
+expand_mode = 4

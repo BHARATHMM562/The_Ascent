@@ -1,0 +1,239 @@
+[gd_scene load_steps=18 format=3 uid="uid://b5wd4aesox7cd"]
+
+[ext_resource type="Texture2D" uid="uid://bfrocy0n31ihs" path="res://Assets/UI/BG.png" id="1_6aje7"]
+[ext_resource type="Script" uid="uid://jf10462fqoj2" path="res://Scripts/main_menu.gd" id="1_m8m1u"]
+[ext_resource type="Texture2D" uid="uid://5fjn6agiobke" path="res://Assets/UI/The Ascent.png" id="2_m8m1u"]
+[ext_resource type="Texture2D" uid="uid://mkgi6nsnpq1q" path="res://Assets/UI/New Game  col_Button.png" id="3_yoe8p"]
+[ext_resource type="Texture2D" uid="uid://b26o6kdxa61tw" path="res://Assets/UI/Options  col_Button.png" id="5_6ws6c"]
+[ext_resource type="Texture2D" uid="uid://bak6vnogjbu8r" path="res://Assets/UI/Continue  col_Button.png" id="5_c0rjq"]
+[ext_resource type="Texture2D" uid="uid://kkdi3por6pef" path="res://Assets/UI/Exit  col_Button.png" id="6_c0rjq"]
+[ext_resource type="Texture2D" uid="uid://cw7v38bqd13hk" path="res://Assets/UI/Back  col_Button.png" id="7_m8m1u"]
+[ext_resource type="Texture2D" uid="uid://p7ul6yrihyve" path="res://Assets/UI/Audio col_Square Button.png" id="8_jn3pw"]
+[ext_resource type="Script" uid="uid://ck3rlvm6eu163" path="res://Scripts/Main Menu/scale_control.gd" id="10_c0rjq"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ycpb7"]
+texture = ExtResource("1_6aje7")
+modulate_color = Color(0.43134, 0.43134, 0.43134, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6aje7"]
+bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ltq12"]
+bg_color = Color(0.509804, 0.509804, 0.509804, 0)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_6ws6c"]
+thickness = 25
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_c0rjq"]
+color = Color(1, 0, 0, 1)
+thickness = 25
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_ycpb7"]
+color = Color(1, 0, 0, 1)
+thickness = 25
+
+[sub_resource type="GDScript" id="GDScript_jn3pw"]
+script/source = "extends HSlider
+
+# Set the name of the Audio Bus this slider should control (e.g., \"Master\", \"Music\", \"SFX\")
+# Change \"Master\" to match your desired audio bus name in the Inspector.
+@export var audio_bus_name: String = \"Master\"
+
+var bus_index: int = -1 # Will store the index of the audio bus
+
+
+func _ready() -> void:
+	# Get the numerical index for the named bus once
+	bus_index = AudioServer.get_bus_index(audio_bus_name)
+	
+	if bus_index != -1:
+		# 1. Get the current volume of the bus (in dB).
+		var current_volume_db = AudioServer.get_bus_volume_db(bus_index)
+		
+		# 2. Convert the dB volume to a linear scale (0.0 to 1.0) for the slider.
+		var linear_volume = db_to_linear(current_volume_db)
+		
+		# 3. Initialize the slider's value to the current volume.
+		value = linear_volume
+	else:
+		# This will print an error if the bus name is wrong
+		push_error(\"Audio Bus not found: \", audio_bus_name)
+
+
+# FIX: Renamed the parameter from 'value' to 'new_value' to avoid the shadowing warning.
+# This function is connected to the 'value_changed(float value)' signal of the HSlider.
+func _on_value_changed(new_value: float) -> void:
+	if bus_index != -1:
+		# 1. Convert the slider's linear value (0.0 to 1.0) into the dB scale.
+		var volume_db = linear_to_db(new_value)
+		
+		# 2. Set the volume of the audio bus.
+		AudioServer.set_bus_volume_db(bus_index, volume_db)
+"
+
+[node name="Main Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m8m1u")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ycpb7")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+offset_left = 585.0
+offset_top = -152.0
+offset_right = 1335.0
+offset_bottom = 488.0
+texture = ExtResource("2_m8m1u")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -304.0
+offset_top = 236.0
+offset_right = 304.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NewGame" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+theme_override_styles/hover = SubResource("StyleBoxFlat_6aje7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ltq12")
+icon = ExtResource("3_yoe8p")
+
+[node name="Continue" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+theme_override_styles/hover = SubResource("StyleBoxFlat_6aje7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ltq12")
+icon = ExtResource("5_c0rjq")
+
+[node name="Options" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+theme_override_styles/hover = SubResource("StyleBoxFlat_6aje7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ltq12")
+icon = ExtResource("5_6ws6c")
+
+[node name="Exit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+theme_override_styles/hover = SubResource("StyleBoxFlat_6aje7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ltq12")
+icon = ExtResource("6_c0rjq")
+
+[node name="Options" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.283
+anchor_top = -0.637
+anchor_right = -0.283
+anchor_bottom = -0.637
+offset_left = 579.36
+offset_top = 703.96
+offset_right = 2427.36
+offset_bottom = 1751.96
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Options" type="Sprite2D" parent="Options"]
+position = Vector2(924, 120)
+scale = Vector2(1.08667, 1.14)
+texture = ExtResource("5_6ws6c")
+
+[node name="Back" type="Button" parent="Options"]
+layout_mode = 0
+offset_left = 620.0
+offset_top = 824.0
+offset_right = 1228.0
+offset_bottom = 1032.0
+icon = ExtResource("7_m8m1u")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Options"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.123
+anchor_top = 0.282
+anchor_right = 0.764
+anchor_bottom = 0.489
+offset_left = 416.696
+offset_top = 65.464
+offset_right = -191.872
+offset_bottom = 104.528
+
+[node name="AudioControl" type="HSlider" parent="Options/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/slider = SubResource("StyleBoxLine_6ws6c")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_c0rjq")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_ycpb7")
+value = 50.0
+script = SubResource("GDScript_jn3pw")
+
+[node name="Sprite2D" type="Sprite2D" parent="Options/HBoxContainer"]
+position = Vector2(-136, 16)
+texture = ExtResource("8_jn3pw")
+
+[node name="Scale_control" type="OptionButton" parent="Options"]
+layout_mode = 0
+offset_left = 628.0
+offset_top = 544.0
+offset_right = 1220.0
+offset_bottom = 744.0
+theme_override_colors/font_disabled_color = Color(1, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0, 0, 1)
+theme_override_colors/icon_disabled_color = Color(1, 0, 0, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.733333, 0, 0, 1)
+theme_override_colors/icon_hover_color = Color(0.878431, 0, 0, 1)
+theme_override_colors/icon_pressed_color = Color(1, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(1, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 130
+selected = 0
+item_count = 4
+popup/item_0/text = "ULTRA"
+popup/item_0/id = 0
+popup/item_1/text = "HIGH"
+popup/item_1/id = 1
+popup/item_2/text = "MEDIUM"
+popup/item_2/id = 2
+popup/item_3/text = "LOW"
+popup/item_3/id = 3
+script = ExtResource("10_c0rjq")
+
+[connection signal="pressed" from="VBoxContainer/NewGame" to="." method="_on_NewGame_pressed"]
+[connection signal="pressed" from="VBoxContainer/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="Options/Back" to="." method="_on_back_pressed"]
+[connection signal="value_changed" from="Options/HBoxContainer/AudioControl" to="Options/HBoxContainer/AudioControl" method="_on_value_changed"]
+[connection signal="item_selected" from="Options/Scale_control" to="Options/Scale_control" method="_on_item_selected"]
