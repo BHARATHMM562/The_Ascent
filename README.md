@@ -68,27 +68,6 @@ To export builds:
 
 ---
 
-## 📁 Project Structure
-The_Assent.godot
--scenes/
---MainMenu.tscn
---PauseMenu.tscn
---Level1.tscn
---Level2.tscn
-...
--scripts/
---player.gd
---goblin.gd
---shinobi.gd
-...
--assets/
---sprites/
---tilesets/
---audio/
-
-
----
-
 ## 🧪 Testing & Performance
 - Target frame rate: **60 FPS**  
 - Tested across multiple systems  
